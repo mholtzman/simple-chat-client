@@ -31,7 +31,7 @@ angular.module('chatClient')
                 // ideally, this should be encapsulated in a directive (or just use angularjs-scroll-glue)
                 // but adding it here due to time constraints
                 if (messages.length > 0) {
-                    lastUpdate = moment(messages[messages.length - 1].timestamp).valueOf();
+                    lastUpdate = moment(messages[messages.length - 1].timestamp).valueOf() + 1;
 
                     $timeout(function() {
                         const scrollPane = document.getElementById('chat-messages');
@@ -79,9 +79,10 @@ angular.module('chatClient')
         Ctrl.signin = function() {
             User.save(Ctrl.userInput, function(user) {
                 Ctrl.userId = user.id;
+                Ctrl.isRep = user.isRep;
                 Ctrl.userInput.firstName = user.firstName;
 
-                if (user.isRep) {
+                if (Ctrl.isRep) {
                     // if the user is a rep, show a list of active chats to join
                     Ctrl.repChoice = true;
                     Chat.query(function(chats) {
@@ -96,7 +97,7 @@ angular.module('chatClient')
         };
 
         Ctrl.endChat = function() {
-            if (Ctrl.chatId) {
+            if (Ctrl.chatId && !Ctrl.isRep) {
                 Chat.update({ chatId: Ctrl.chatId }, { active: false });
             }
 
@@ -106,6 +107,7 @@ angular.module('chatClient')
             Ctrl.chatId = false;
             Ctrl.userId = false;
             Ctrl.repChoice = false;
+            Ctrl.isRep = false;
             Ctrl.activeChats = [];
         };
 
