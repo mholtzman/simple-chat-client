@@ -1,0 +1,96 @@
+<html>
+    <head>
+        <title>myawesomesite.com</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="empty-client.css"></style>
+
+        <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>* -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-resource.js"></script>
+        <script type="text/javascript" src="http://momentjs.com/downloads/moment.min.js"></script>
+
+        <!-- chat client JS files -->
+        <script type="text/javascript" src="chat-client-services.js"></script>
+        <script type="text/javascript" src="chat-client.js"></script>
+    </head>
+
+    <body ng-app="chatClient" ng-controller="chatWindowController as Chat" >
+        <div id="header">
+            <div class="nav-item">Home</div>
+            <div class="nav-item">Products</div>
+            <div class="nav-item">Checkout</div>
+        </div>
+        <div id="content">
+
+        </div>
+
+        <div id="chat-header" ng-click="Chat.handleHeaderClick()" ng-class='{ open: Chat.chatOpen }'>
+            <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+            <span class="text">{{ Chat.headerText }}</span>
+            <span class="glyphicon glyphicon-chevron-up right-side" ng-show="!Chat.chatOpen" aria-hidden="true"></span>
+            <span ng-show="Chat.chatOpen" class="glyphicon glyphicon-remove right-side" ng-click="Chat.endChat()" aria-hidden="true"></span>
+        </div>
+
+        <div id="chat" ng-class='{ open: Chat.chatOpen }'>
+            <div ng-show="Chat.showLogin()" id="start-chat">
+                <div>Please provide your name and e-mail address so that we can contact you in case of a lost connection.</div>
+
+                <div class="user-info">
+                    <div>
+                        <label for="firstName">First Name: </label>
+                        <input id="firstName" ng-model="Chat.userInput.firstName">
+                    </div>
+
+                    <div>
+                        <label for="lastName">Last Name: </label>
+                        <input id="lastName" ng-model="Chat.userInput.lastName">
+                    </div>
+
+                    <div>
+                        <label for="email">Email: </label>
+                        <input id="email" ng-model="Chat.userInput.email">
+                    </div>
+
+                    <div class="btn-container">
+                        <button ng-click="Chat.signin()" class="btn btn-primary">Chat!</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="rep-choice" ng-show="Chat.repChoice">
+                <div>
+                    Welcome back {{ Chat.userInput.firstName }}! Choose a chat to join:
+                </div>
+
+                <div class="active-chats" ng-repeat="chat in Chat.activeChats">
+                    <div class="active-chat" ng-click="Chat.joinChat(chat.id, chat.User)">
+                        {{ chat.User.firstName + ' ' + chat.User.lastName }}, started at {{ chat.started_at | date:'shortTime' }}
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="Chat.chatStarted()" id="chat-messages">
+                <div class="chat-message" ng-repeat="message in Chat.messages" ng-class='{ fromMe: Chat.isMine(message) }'>
+                    <span>{{ message.text }}</span>
+                    <div class="message-attribution">
+                        <span>{{ message.User.firstName }} • </span>
+                        <span>{{ message.timestamp | date:'shortTime' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-chat" ng-show="Chat.chatStarted()">
+                <form ng-submit="Chat.submitMessage()">
+                    <div class="input-group">
+                      <input ng-model="Chat.chatText" type="text" class="form-control" placeholder="Type your message here">
+                      <span class="input-group-btn">
+                        <input class="btn btn-default submit-btn" type="submit" value="Send">
+                      </span>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </body>
+</html>
