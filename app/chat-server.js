@@ -156,7 +156,7 @@ const seedDB = function() {
     return Promise.all([
         DB.Role.create({ id: 1, description: 'Site Rep' }),
         DB.Role.create({ id: 2, description: 'Customer' }),
-        DB.User.create({ id: 1, email: 'admin@myawesomeapp.com', firstName: 'Admin', role_id: 1  })
+        DB.User.create({ id: 1, email: 'admin@app.com', firstName: 'Admin', role_id: 1  })
     ]);
 }
 
