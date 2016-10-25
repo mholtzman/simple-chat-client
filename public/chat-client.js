@@ -95,7 +95,10 @@ angular.module('chatClient')
         };
 
         Ctrl.endChat = function() {
-            Chat.update({ chatId: Ctrl.chatId }, { active: false });
+            if (Ctrl.chatId) {
+                Chat.update({ chatId: Ctrl.chatId }, { active: false });
+            }
+            
             stopPolling();
             lastUpdate = false;
 
