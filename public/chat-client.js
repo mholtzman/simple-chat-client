@@ -6,7 +6,7 @@ angular.module('chatClient')
         const liveChat = 'Live Chat';
 
         Ctrl.chatOpen = false;
-        Ctrl.userInput = { firstName: 'Matt', lastName: 'Holtzman', email: 'admin@myawesomeapp.com' };
+        Ctrl.userInput = { };
         Ctrl.messages = [];
 
         let poller = false;
@@ -31,13 +31,14 @@ angular.module('chatClient')
                 // ideally, this should be encapsulated in a directive (or just use angularjs-scroll-glue)
                 // but adding it here due to time constraints
                 if (messages.length > 0) {
+                    lastUpdate = moment(messages[messages.length - 1].timestamp).valueOf();
+
                     $timeout(function() {
                         const scrollPane = document.getElementById('chat-messages');
                         scrollPane.scrollTop = scrollPane.scrollHeight;
                     }, 0);
-                }                
+                }
 
-                lastUpdate = moment().valueOf();
                 pollForUpdates();
             });
         };
@@ -98,7 +99,7 @@ angular.module('chatClient')
             if (Ctrl.chatId) {
                 Chat.update({ chatId: Ctrl.chatId }, { active: false });
             }
-            
+
             stopPolling();
             lastUpdate = false;
 
