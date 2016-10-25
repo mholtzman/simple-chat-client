@@ -109,6 +109,7 @@ angular.module('chatClient')
             Ctrl.repChoice = false;
             Ctrl.isRep = false;
             Ctrl.activeChats = [];
+            Ctrl.messages = [];
         };
 
         Ctrl.submitMessage = function() {
